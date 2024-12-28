@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
+}
+
+model Kullanici {
+  id              Int           @id @unique @default(autoincrement())
+  ad              String
+  soyad           String
+  kullaniciadi    String        @unique
+  sifre           String
+  resim           String        @default("")
+  urunler         Urun[]        @relation("urunSahibi")
+  aldigiUrunler   Urun[]        @relation("satan")
+  yorumlar        Yorum[]       @relation("yorumSahibi")
+}
+
+model Urun {
+  id              Int           @id @unique @default(autoincrement())
+  ad              String
+  kategori        String
+  fiyat           Decimal
+  aciklama        String
+  marka           String
+  durum           String
+  tarih           DateTime      @default(now())
+  renk            String?
+  materyal        String?
+
+  il              String
+  ilce            String
+
+  resim           String
+  kullanici       Kullanici     @relation("urunSahibi" ,fields: [kullaniciId], references: [id], onDelete: Cascade)
+  kullaniciId     Int
+
+  gorunum         Int           @default(0)
+  satan           Kullanici?    @relation("satan", fields: [satanId], references: [id], onDelete: Cascade)
+  satanId         Int?
+  
+  yorumlar        Yorum[]       @relation("yorumMetin")
+}
+
+model Yorum {
+  id              Int           @id @unique @default(autoincrement())
+  metin           String
+  kullanici       Kullanici     @relation("yorumSahibi", fields: [kullaniciId], references: [id], onDelete: Cascade)
+  kullaniciId     Int
+  urun            Urun          @relation("yorumMetin", fields: [urunId], references: [id], onDelete: Cascade)
+  urunId          Int
+  cevap           Cevap?
+}
+
+model Cevap {
+  id              Int           @id @unique @default(autoincrement())
+  metin           String
+  yorum           Yorum         @relation(fields: [yorumId], references: [id], onDelete: Cascade)
+  yorumId         Int           @unique
+}
