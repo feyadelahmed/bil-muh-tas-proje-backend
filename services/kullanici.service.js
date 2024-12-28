@@ -12,7 +12,7 @@ async function kullaniciadiIleKullaniciProfilGetir(kullaniciadi) {
           kullanici: {
             select: {
               kullaniciadi: true,
-            }
+            },
           },
         },
       }
