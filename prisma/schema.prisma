@@ -15,8 +15,8 @@ model Kullanici {
   sifre           String
   resim           String        @default("")
   urunler         Urun[]        @relation("urunSahibi")
-  aldigiUrunler   Urun[]        @relation("satan")
   yorumlar        Yorum[]       @relation("yorumSahibi")
+  odemeler        Odeme[]
 }
 
 model Urun {
@@ -39,10 +39,9 @@ model Urun {
   kullaniciId     Int
 
   gorunum         Int           @default(0)
-  satan           Kullanici?    @relation("satan", fields: [satanId], references: [id], onDelete: Cascade)
-  satanId         Int?
-  
+
   yorumlar        Yorum[]       @relation("yorumMetin")
+  odeme           Odeme?
 }
 
 model Yorum {
@@ -60,4 +59,14 @@ model Cevap {
   metin           String
   yorum           Yorum         @relation(fields: [yorumId], references: [id], onDelete: Cascade)
   yorumId         Int           @unique
+}
+
+model Odeme {
+  id              String        @id @unique @default(uuid())
+  urunId          Int           @unique
+  urun            Urun          @relation(fields: [urunId], references: [id], onDelete: Cascade)
+  kullaniciId     Int?           
+  kullanici       Kullanici?     @relation(fields: [kullaniciId], references: [id], onDelete: Cascade)
+  dekont          String?
+  durum           Boolean       @default(false)
 }

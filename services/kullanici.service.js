@@ -2,7 +2,7 @@ const {PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function kullaniciadiIleKullaniciProfilGetir(kullaniciadi) {
-  const kullanici = prisma.kullanici.findFirst({
+  const kullanici = await prisma.kullanici.findFirst({
     where: {
       kullaniciadi,
     },
@@ -14,15 +14,22 @@ async function kullaniciadiIleKullaniciProfilGetir(kullaniciadi) {
               kullaniciadi: true,
             },
           },
+          odeme: true,
         },
-      }
+      },
+      odemeler: {
+        include: {
+          urun: true,
+        }
+      },
     }
   })
+  kullanici.urunler = kullanici.urunler.filter(urun => !urun.odeme || !urun.odeme.durum);
   return kullanici;
 }
 
 async function kullaniciIdIleKullaniciGetir(id) {
-  const kullanici = prisma.kullanici.findFirst({
+  const kullanici = await prisma.kullanici.findFirst({
     where: {
       id,
     },
@@ -31,7 +38,7 @@ async function kullaniciIdIleKullaniciGetir(id) {
 }
 
 async function kullaniciadiIleKullaniciGetir(kullaniciadi) {
-  const kullanici = prisma.kullanici.findFirst({
+  const kullanici = await prisma.kullanici.findFirst({
     where: {
       kullaniciadi,
     },
@@ -40,7 +47,7 @@ async function kullaniciadiIleKullaniciGetir(kullaniciadi) {
 }
 
 async function yeniKullaniciOlustur(ad, soyad, kullaniciadi, sifre) {
-  const kullanici = prisma.kullanici.create({
+  const kullanici = await prisma.kullanici.create({
     data: {
       ad,
       soyad,
@@ -52,7 +59,7 @@ async function yeniKullaniciOlustur(ad, soyad, kullaniciadi, sifre) {
 }
 
 async function kullaniciadiIleKullaniciSil(kullaniciadi) {
-  const kullanici = prisma.kullanici.delete({
+  const kullanici = await prisma.kullanici.delete({
     where: {
       kullaniciadi,
     }
@@ -62,7 +69,7 @@ async function kullaniciadiIleKullaniciSil(kullaniciadi) {
 }
 
 async function  kullaniciadiIleKullaniciGuncelle(kullaniciadi, guncelBilgiler) {
-  const kullanici = prisma.kullanici.update({
+  const kullanici = await prisma.kullanici.update({
     where: {
       kullaniciadi,
     },

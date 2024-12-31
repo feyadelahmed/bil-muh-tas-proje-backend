@@ -41,7 +41,7 @@ async function urunOustur(
 }
 
 async function urunIdIleUrunGetir(id) {
-  const urun = prisma.urun.findFirst({
+  const urun = await prisma.urun.findFirst({
     where: {
       id,
     },
@@ -66,12 +66,12 @@ async function urunIdIleUrunGetir(id) {
 }
 
 async function tumUrunleriGetir() {
-  const urunler = prisma.urun.findMany();
+  const urunler = await prisma.urun.findMany();
   return urunler;
 }
 
 async function urunIdIleKullanicininUrunuSil(id, kullaniciId) {
-  const urun = prisma.urun.delete({
+  const urun = await prisma.urun.delete({
     where: {
       id,
       kullaniciId,
@@ -81,7 +81,7 @@ async function urunIdIleKullanicininUrunuSil(id, kullaniciId) {
 }
 
 async function  urunGuncelle(id, guncelBilgiler) {
-  const urun = prisma.urun.update({
+  const urun = await prisma.urun.update({
     where: {
       id,
     },
@@ -92,7 +92,7 @@ async function  urunGuncelle(id, guncelBilgiler) {
 }
 
 async function urunGorunumArttir(id) {
-  const urun = prisma.urun.update({
+  const urun = await prisma.urun.update({
     where: {
       id,
     },

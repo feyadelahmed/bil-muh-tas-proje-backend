@@ -5,6 +5,7 @@ const cors = require('cors');
 const kullaniciRoute = require('./routes/kullanici.route');
 const urunRoute = require('./routes/urun.route');
 const yorumRoute = require('./routes/yorum.route');
+const odemeRoute = require('./routes/odeme.route');
 const ApiError = require('./utils/ApiError');
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use("/kullanici", kullaniciRoute)
 app.use("/urun", urunRoute)
 app.use("/yorum", yorumRoute)
+app.use("/odeme", odemeRoute)
 
 app.get("/", (req, res) => {
   res.json({status: "ok"});
