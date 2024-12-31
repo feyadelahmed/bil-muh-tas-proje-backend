@@ -65,11 +65,6 @@ async function urunIdIleUrunGetir(id) {
   return urun;
 }
 
-async function tumUrunleriGetir() {
-  const urunler = await prisma.urun.findMany();
-  return urunler;
-}
-
 async function urunIdIleKullanicininUrunuSil(id, kullaniciId) {
   const urun = await prisma.urun.delete({
     where: {
@@ -120,6 +115,29 @@ async function urunGorunumArttir(id) {
   });
 
   return urun;
+}
+
+async function tumUrunleriGetir() {
+  const urunler = await prisma.urun.findMany({
+    include: {
+      kullanici: {
+        select: {
+          kullaniciadi: true,
+          ad: true,
+          soyad: true,
+          resim: true,
+        }
+      },
+      yorumlar: {
+        include: {
+          kullanici: true,
+          cevap: true,
+        }
+      },
+      odeme: true,
+    }
+  });
+  return urunler;
 }
 
 module.exports = {

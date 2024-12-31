@@ -30,7 +30,17 @@ async function odemeTamamla(id, kullaniciId, dekont, durum) {
   return odeme;
 }
 
+async function faturaGetir(id) {
+  const odeme = await prisma.odeme.findFirst({
+    where: {
+      id,
+    },
+  });
+  return odeme;
+}
+
 module.exports = {
   odemeBasla,
-  odemeTamamla
+  odemeTamamla,
+  faturaGetir,
 }

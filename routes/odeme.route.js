@@ -44,11 +44,23 @@ router.post("/session", girisMiddleware, async (req, res, next) => {
         },
       ],
       mode: 'payment',
-      success_url: `${FRONTEND_DOMAIN}/odeme/success.html`,
-      cancel_url: `${FRONTEND_DOMAIN}/odeme/cancel.html`,
+      success_url: `${FRONTEND_DOMAIN}/odeme/success/${odeme.id}`,
+      cancel_url: `${FRONTEND_DOMAIN}/odeme/cancel/${odeme.id}`,
     });
     res.json({
       url: session.url,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/fatura/:odemeId", async (req, res, next) => {
+  try {
+    const odemeId = req.params.odemeId;
+    const odeme = await odemeService.faturaGetir(odemeId);
+    res.json({
+      odeme,
     });
   } catch (error) {
     next(error);
