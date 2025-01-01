@@ -7,6 +7,7 @@ const urunRoute = require('./routes/urun.route');
 const yorumRoute = require('./routes/yorum.route');
 const odemeRoute = require('./routes/odeme.route');
 const ApiError = require('./utils/ApiError');
+const { getRes } = require('./test-api-calls');
 
 const app = express();
 app.use(cors());
@@ -19,6 +20,13 @@ app.use("/odeme", odemeRoute)
 app.get("/", (req, res) => {
   res.json({status: "ok"});
 });
+
+app.get("/a", async (req, res) => {
+  try {
+    res.json(await getRes());
+  } catch (error) {
+  }
+})
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -45,7 +53,7 @@ app.use((error, req, res, next) => {
   })
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, (error) => {
   if (error) {
     console.log(error);

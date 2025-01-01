@@ -6,7 +6,6 @@ const odemeService = require("../services/odeme.service");
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const FRONTEND_DOMAIN = process.env.FRONTEND_DOMAIN;
 
-
 router.post("/webhook", async (req, res, next) => {
   const event = req.body;
   res.sendStatus(200);
