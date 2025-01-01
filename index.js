@@ -7,7 +7,7 @@ const urunRoute = require('./routes/urun.route');
 const yorumRoute = require('./routes/yorum.route');
 const odemeRoute = require('./routes/odeme.route');
 const ApiError = require('./utils/ApiError');
-const { getRes } = require('./test-api-calls');
+const { getRes, staticData } = require('./test-api-calls');
 
 const app = express();
 app.use(cors());
@@ -23,7 +23,13 @@ app.get("/", (req, res) => {
 
 app.get("/a", async (req, res) => {
   try {
-    res.json(await getRes());
+    const data = await getRes();
+    
+    if (data.includes(undefined)) {
+      res.json(staticData);
+    } else {
+      res.json(data);
+    }
   } catch (error) {
   }
 })
